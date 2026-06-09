@@ -1139,11 +1139,49 @@
 
   // Formulario (demo)
   // Para conectar con email real → Formspree: https://formspree.io
-  function enviarFormulario(e) {
-    e.preventDefault();
+function enviarFormulario(e) {
+  e.preventDefault();
+  
+  // URL de la aplicación web que copiaste de Google Apps Script
+  const scriptURL = 'REEMPLAZA_CON_TU_URL_DE_APPS_SCRIPT';
+  
+  // Capturamos los datos del formulario
+  const formData = {
+    nombre: document.getElementById('nombre').value,
+    apellido: document.getElementById('apellido').value,
+    email: document.getElementById('email').value,
+    telefono: document.getElementById('telefono').value,
+    interes: document.getElementById('interes').value,
+    mensaje: document.getElementById('mensaje').value
+  };
+
+  // Cambiar el texto del botón para mostrar que se está enviando
+  const btn = e.target.querySelector('button[type="submit"]');
+  const originalBtnText = btn.textContent;
+  btn.textContent = "Enviando...";
+  btn.disabled = true;
+
+  // Enviamos los datos al Google Sheet
+  fetch(scriptURL, {
+    method: 'POST',
+    mode: 'no-cors', // Evita problemas de seguridad de origen cruzado
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(() => {
+    // Si se envía con éxito, ocultamos el formulario y mostramos el mensaje de éxito
     document.getElementById('contact-form').style.display = 'none';
     document.getElementById('form-success').style.display = 'block';
-  }
+  })
+  .catch(error => {
+    console.error('Error al enviar:', error);
+    alert('Hubo un problema al enviar tu consulta. Por favor, intentalo de nuevo o escribinos por WhatsApp.');
+    btn.textContent = originalBtnText;
+    btn.disabled = false;
+  });
+}
 </script>
 </body>
 </html>
