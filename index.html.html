@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volteo Ecuestre Argentina — [Nombre del equipo]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  /* =============================================
+     VARIABLES — paleta celeste / azul / blanco
+  ============================================= */
+  :root {
+    --blue:    #1558A8;
+    --sky:     #3FA8D8;
+    --navy:    #0A3A6B;
+    --white:   #FFFFFF;
+    --offwhite:#F4F9FD;
+    --light:   #E3F2FB;
+    --mid:     #EBF5FC;
+    --text:    #0D1E30;
+    --muted:   #4A6D8C;
+    --border:  rgba(21,88,168,0.14);
+    --radius:  12px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  img { max-width: 100%; display: block; }
+  a { text-decoration: none; color: inherit; }
+  section { padding: 90px 0; }
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+
+  /* =============================================
+     NAVEGACIÓN
+  ============================================= */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 0 24px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255,255,255,0.94);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  nav.scrolled { box-shadow: 0 2px 16px rgba(21,88,168,0.1); }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.08em;
+    color: var(--blue);
+  }
+  .nav-logo span { color: var(--sky); }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--blue); }
+  .nav-cta {
+    background: var(--blue) !important;
+    color: var(--white) !important;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-weight: 600 !important;
+    transition: opacity 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--blue); border-radius: 2px; transition: all 0.3s;
+  }
+  .nav-mobile {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(255,255,255,0.98);
+    padding: 24px; flex-direction: column; gap: 20px;
+    z-index: 999;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(21,88,168,0.08);
+  }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a {
+    font-size: 18px; font-weight: 500; color: var(--text);
+    border-bottom: 1px solid var(--border); padding-bottom: 14px;
+  }
+  .nav-mobile a:last-child { border-bottom: none; }
+
+  /* =============================================
+     HERO
+  ============================================= */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    text-align: center;
+    background: #0A1F3D;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 65% 55% at 50% 45%, rgba(63,168,216,0.22) 0%, transparent 65%),
+      radial-gradient(ellipse 45% 35% at 20% 80%, rgba(21,88,168,0.25) 0%, transparent 55%),
+      #0A1F3D;
+    z-index: 0;
+  }
+
+  .hero-img-placeholder {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, rgba(10,31,61,0.4) 0%, rgba(10,31,61,0.88) 100%),
+      repeating-linear-gradient(
+        45deg,
+        rgba(63,168,216,0.03) 0px, rgba(63,168,216,0.03) 1px,
+        transparent 1px, transparent 40px
+      );
+    z-index: 1;
+  }
+
+  /* Pista de volteo decorativa */
+  .hero-track {
+    position: absolute;
+    bottom: 100px; left: 50%;
+    transform: translateX(-50%);
+    width: 520px; height: 260px;
+    border: 1.5px solid rgba(63,168,216,0.2);
+    border-radius: 50%;
+    z-index: 2;
+  }
+  .hero-track::after {
+    content: '';
+    position: absolute;
+    inset: 20px;
+    border: 1px solid rgba(63,168,216,0.08);
+    border-radius: 50%;
+  }
+
+  .hero-content {
+    position: relative; z-index: 3;
+    max-width: 840px; padding: 0 24px;
+    /* Bajamos un poco el contenido para que el título no quede cortado */
+    padding-top: 80px;
+  }
+
+  .hero-eyebrow {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; color: var(--sky);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding: 6px 18px;
+    border: 1px solid rgba(63,168,216,0.4);
+    border-radius: 99px;
+    background: rgba(63,168,216,0.06);
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(60px, 10.5vw, 118px);
+    line-height: 0.96;
+    letter-spacing: 0.02em;
+    color: var(--white);
+    margin-bottom: 30px;
+    /* padding-top para que "Arte" no quede oculto detrás de la nav */
+    padding-top: 16px;
+  }
+  .hero-title em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--sky);
+    font-size: 0.75em;
+    line-height: 1;
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: 17px; font-weight: 300;
+    color: rgba(255,255,255,0.62);
+    line-height: 1.75;
+    max-width: 540px;
+    margin: 0 auto 42px;
+  }
+
+  .hero-actions {
+    display: flex; gap: 14px;
+    justify-content: center; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--blue);
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 600; font-size: 14px;
+    letter-spacing: 0.03em;
+    border: none; cursor: pointer;
+    transition: opacity 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 500; font-size: 14px;
+    border: 1px solid rgba(255,255,255,0.28);
+    transition: border-color 0.2s, transform 0.15s;
+    cursor: pointer;
+  }
+  .btn-secondary:hover { border-color: var(--sky); transform: translateY(-1px); }
+
+  .hero-stats {
+    display: flex; justify-content: center;
+    gap: 48px; flex-wrap: wrap;
+    margin-top: 72px;
+    padding-top: 36px;
+    border-top: 1px solid rgba(63,168,216,0.2);
+  }
+  .hero-stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 44px; color: var(--sky); line-height: 1;
+  }
+  .hero-stat-label {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase; margin-top: 4px;
+  }
+
+  /* =============================================
+     SOBRE NOSOTROS
+  ============================================= */
+  #sobre { background: var(--white); }
+  .sobre-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px; align-items: center;
+  }
+  .sobre-img {
+    aspect-ratio: 4/5;
+    background: var(--light);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; color: var(--muted); font-size: 14px;
+    position: relative; overflow: hidden;
+  }
+  .sobre-img::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(21,88,168,0.04) 0%, transparent 60%);
+  }
+  .placeholder-icon { font-size: 48px; opacity: 0.3; }
+
+  .section-eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.16em; color: var(--blue);
+    text-transform: uppercase; margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1; letter-spacing: 0.02em;
+    margin-bottom: 20px; color: var(--text);
+  }
+  .section-title em {
+    font-family: 'Playfair Display', serif;
+    font-style: italic; color: var(--blue);
+  }
+  .section-body {
+    font-size: 15px; line-height: 1.8;
+    color: var(--muted); margin-bottom: 16px;
+  }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+  .tag {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.04em; color: var(--blue);
+    border: 1px solid rgba(21,88,168,0.25);
+    background: rgba(21,88,168,0.05);
+    padding: 5px 14px; border-radius: 99px;
+  }
+
+  /* =============================================
+     SERVICIOS / DISCIPLINAS
+  ============================================= */
+  #servicios { background: var(--mid); }
+  .section-header { text-align: center; max-width: 600px; margin: 0 auto 60px; }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    transition: border-color 0.25s, transform 0.2s, box-shadow 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--blue), var(--sky));
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .card:hover {
+    border-color: rgba(21,88,168,0.3);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(21,88,168,0.1);
+  }
+  .card:hover::before { opacity: 1; }
+  .card-icon { font-size: 36px; margin-bottom: 16px; display: block; }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px; letter-spacing: 0.04em;
+    color: var(--text); margin-bottom: 10px;
+  }
+  .card-desc {
+    font-size: 14px; line-height: 1.7;
+    color: var(--muted); margin-bottom: 18px;
+  }
+  .card-price {
+    font-size: 13px; font-weight: 600; color: var(--blue);
+    padding-top: 16px; border-top: 1px solid var(--border);
+  }
+
+  /* =============================================
+     GALERÍA
+  ============================================= */
+  #galeria { background: var(--white); }
+  .galeria-filtros {
+    display: flex; gap: 10px;
+    flex-wrap: wrap; justify-content: center; margin-bottom: 40px;
+  }
+  .filtro-btn {
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 0.06em; padding: 8px 20px;
+    border-radius: 99px; border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filtro-btn.active, .filtro-btn:hover {
+    border-color: var(--blue); color: var(--blue);
+    background: rgba(21,88,168,0.06);
+  }
+  .galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .galeria-item {
+    position: relative; border-radius: var(--radius);
+    overflow: hidden; cursor: pointer;
+    background: var(--light);
+    aspect-ratio: 4/3;
+    display: flex; align-items: center;
+    justify-content: center; flex-direction: column;
+    gap: 8px; border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s;
+  }
+  .galeria-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 28px rgba(21,88,168,0.12);
+  }
+  .galeria-item.wide { grid-column: span 2; }
+  .galeria-item .ph-label {
+    font-size: 11px; color: var(--muted);
+    letter-spacing: 0.06em; text-align: center; padding: 0 12px;
+  }
+  .galeria-item .ph-icon { font-size: 32px; opacity: 0.25; }
+  .galeria-overlay {
+    position: absolute; inset: 0;
+    background: rgba(21,88,168,0.7);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.25s;
+  }
+  .galeria-item:hover .galeria-overlay { opacity: 1; }
+  .galeria-overlay span {
+    font-size: 11px; letter-spacing: 0.1em;
+    color: var(--white); text-transform: uppercase;
+    font-weight: 600; border: 1px solid rgba(255,255,255,0.6);
+    padding: 8px 18px; border-radius: 6px;
+  }
+
+  .lightbox {
+    display: none; position: fixed; inset: 0;
+    background: rgba(10,31,61,0.96); z-index: 9999;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 20px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-content {
+    max-width: 700px; width: 90%; aspect-ratio: 4/3;
+    background: var(--light); border-radius: var(--radius);
+    border: 1px solid rgba(63,168,216,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--muted);
+  }
+  .lightbox-close {
+    position: fixed; top: 24px; right: 24px;
+    background: rgba(255,255,255,0.1); border: none;
+    color: var(--white); font-size: 24px;
+    width: 40px; height: 40px; border-radius: 50%;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-title { font-size: 15px; color: rgba(255,255,255,0.75); }
+
+  /* =============================================
+     ATLETAS
+  ============================================= */
+  #atletas { background: var(--mid); }
+  .atletas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+  }
+  .atleta-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .atleta-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(21,88,168,0.1);
+  }
+  .atleta-foto {
+    aspect-ratio: 3/4; background: var(--light);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px;
+    color: var(--muted); font-size: 13px;
+  }
+  .atleta-foto .ph-icon { font-size: 44px; opacity: 0.18; }
+  .atleta-info { padding: 18px 16px; }
+  .atleta-nombre {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px; letter-spacing: 0.04em;
+    color: var(--text); margin-bottom: 4px;
+  }
+  .atleta-rol {
+    font-size: 12px; color: var(--blue);
+    font-weight: 500; letter-spacing: 0.05em; margin-bottom: 10px;
+  }
+  .atleta-logros { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* =============================================
+     TESTIMONIOS
+  ============================================= */
+  #testimonios { background: var(--white); }
+  .testimonios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 20px;
+  }
+  .testimonio {
+    background: var(--mid);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 24px; position: relative;
+  }
+  .testimonio::before {
+    content: '"';
+    position: absolute; top: 10px; left: 18px;
+    font-family: 'Playfair Display', serif;
+    font-size: 72px; color: var(--sky);
+    opacity: 0.25; line-height: 1;
+  }
+  .testimonio-texto {
+    font-size: 15px; line-height: 1.75;
+    color: var(--muted); margin-bottom: 20px; font-style: italic;
+  }
+  .testimonio-autor { display: flex; align-items: center; gap: 12px; }
+  .testimonio-avatar {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--light); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; flex-shrink: 0;
+  }
+  .testimonio-nombre { font-size: 14px; font-weight: 600; color: var(--text); }
+  .testimonio-origen { font-size: 12px; color: var(--muted); }
+
+  /* =============================================
+     CONTACTO
+  ============================================= */
+  #contacto { background: var(--mid); }
+  .contacto-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 72px; align-items: start;
+  }
+  .contacto-info { display: flex; flex-direction: column; gap: 28px; }
+  .contacto-dato { display: flex; gap: 16px; align-items: flex-start; }
+  .contacto-dato-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    background: rgba(21,88,168,0.08);
+    border: 1px solid rgba(21,88,168,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .contacto-dato-label {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em; color: var(--blue);
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+  .contacto-dato-val { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .mapa-placeholder {
+    width: 100%; aspect-ratio: 16/9;
+    background: var(--white); border-radius: var(--radius);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 10px;
+    color: var(--muted); font-size: 13px; margin-top: 28px;
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.07em; color: var(--muted);
+    text-transform: uppercase; margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%;
+    background: var(--white);
+    border: 1px solid rgba(21,88,168,0.2);
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 14px; color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.2s; outline: none;
+  }
+  .form-input:focus {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(21,88,168,0.08);
+  }
+  .form-input::placeholder { color: rgba(74,109,140,0.45); }
+  textarea.form-input { resize: vertical; min-height: 120px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* =============================================
+     FOOTER
+  ============================================= */
+  footer {
+    background: #0A1F3D;
+    padding: 56px 0 32px;
+    border-top: 1px solid rgba(63,168,216,0.15);
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 48px; margin-bottom: 48px;
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px; letter-spacing: 0.06em; color: var(--sky);
+    margin-bottom: 14px;
+  }
+  .footer-logo span { color: rgba(255,255,255,0.85); }
+  .footer-desc { font-size: 14px; color: rgba(255,255,255,0.38); line-height: 1.7; max-width: 280px; }
+  .footer-col-title {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+    color: var(--sky); text-transform: uppercase; margin-bottom: 16px;
+  }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a { font-size: 14px; color: rgba(255,255,255,0.38); transition: color 0.2s; }
+  .footer-links a:hover { color: rgba(255,255,255,0.85); }
+  .redes { display: flex; gap: 12px; margin-top: 20px; }
+  .red-btn {
+    width: 38px; height: 38px; border-radius: 8px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; transition: background 0.2s; text-decoration: none;
+  }
+  .red-btn:hover { background: rgba(63,168,216,0.18); border-color: rgba(63,168,216,0.4); }
+  .footer-bottom {
+    padding-top: 24px; border-top: 1px solid rgba(255,255,255,0.06);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; color: rgba(255,255,255,0.22);
+    flex-wrap: wrap; gap: 8px;
+  }
+
+  /* WhatsApp flotante */
+  .wa-btn {
+    position: fixed; bottom: 28px; right: 28px;
+    width: 54px; height: 54px; border-radius: 50%;
+    background: #25D366; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; z-index: 9000; text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+    transition: transform 0.2s;
+  }
+  .wa-btn:hover { transform: scale(1.08); }
+
+  /* Animaciones scroll */
+  .fade-up {
+    opacity: 0; transform: translateY(26px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .sobre-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contacto-grid { grid-template-columns: 1fr; gap: 48px; }
+    .galeria-grid { grid-template-columns: repeat(2, 1fr); }
+    .galeria-item.wide { grid-column: span 1; }
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .form-row { grid-template-columns: 1fr; }
+    section { padding: 60px 0; }
+    .hero-stats { gap: 28px; }
+  }
+  @media (max-width: 480px) {
+    .galeria-grid { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVEGACIÓN -->
+<nav id="navbar">
+  <div class="nav-logo">VOLTEO<span> ecuestre</span></div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Nosotros</a></li>
+    <li><a href="#servicios">Disciplinas</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#atletas">Atletas</a></li>
+    <li><a href="#testimonios">Testimonios</a></li>
+    <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+  </ul>
+  <button class="hamburger" id="ham-btn" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="#sobre" onclick="closeMobile()">Nosotros</a>
+  <a href="#servicios" onclick="closeMobile()">Disciplinas</a>
+  <a href="#galeria" onclick="closeMobile()">Galería</a>
+  <a href="#atletas" onclick="closeMobile()">Atletas</a>
+  <a href="#testimonios" onclick="closeMobile()">Testimonios</a>
+  <a href="#contacto" onclick="closeMobile()">Contacto</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-img-placeholder"></div>
+  <!-- 💡 Para imagen de fondo: agregá background-image: url('tu-foto.jpg') al .hero-img-placeholder -->
+  <div class="hero-track"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Selección Argentina · Deporte Ecuestre de Alto Rendimiento</div>
+    <h1 class="hero-title">
+      Arte<br><em>sobre</em><br>el caballo
+    </h1>
+    <p class="hero-sub">
+      Gimnasia artística y acrobacia sobre el lomo de un caballo en movimiento.
+      Representamos a la Argentina en competencias nacionales e internacionales bajo la Federación Ecuestre Internacional.
+    </p>
+    <div class="hero-actions">
+      <a href="#servicios" class="btn-primary">Ver disciplinas</a>
+      <a href="#contacto" class="btn-secondary">Sumarte al equipo</a>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">12+</div>
+        <div class="hero-stat-label">Años de trayectoria</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">34</div>
+        <div class="hero-stat-label">Atletas activos</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">8</div>
+        <div class="hero-stat-label">Medallas nacionales</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">3</div>
+        <div class="hero-stat-label">Participaciones internacionales</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE NOSOTROS -->
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-img fade-up">
+        <div class="placeholder-icon">🐴</div>
+        <span style="font-size:12px;letter-spacing:0.06em;color:var(--muted);">Foto del equipo o del club</span>
+        <!-- Reemplazá por: <img src="foto.jpg" alt="Equipo" style="width:100%;height:100%;object-fit:cover;"> -->
+      </div>
+      <div class="fade-up">
+        <div class="section-eyebrow">Quiénes somos</div>
+        <h2 class="section-title">Una pasión que<br><em>nos une</em></h2>
+        <p class="section-body">
+          Nosotros somos [nombre del equipo / selección], y representamos a la Nación Argentina
+          en el deporte del volteo ecuestre a nivel nacional e internacional.
+          <!-- Reemplazá con tu descripción real -->
+        </p>
+        <p class="section-body">
+          Competimos bajo la Federación Ecuestre Argentina y la Federación Ecuestre Internacional (FEI),
+          con atletas de alto rendimiento formados en todo el país.
+          <!-- Completá con más información sobre el equipo -->
+        </p>
+        <div class="tag-list">
+          <span class="tag">🇦🇷 Selección Nacional</span>
+          <span class="tag">🌍 Federación Ecuestre Internacional</span>
+          <span class="tag">🏆 Competencia nacional</span>
+          <span class="tag">📍 [Ciudad, Provincia]</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DISCIPLINAS -->
+<section id="servicios">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Lo que hacemos</div>
+      <h2 class="section-title">Disciplinas<br><em>y clases</em></h2>
+      <p class="section-body" style="margin-top:14px;">
+        Desde iniciación para niños hasta competencia de alto rendimiento.
+      </p>
+    </div>
+    <div class="cards-grid">
+      <div class="card fade-up">
+        <span class="card-icon">🤸</span>
+        <div class="card-title">Volteo Individual</div>
+        <p class="card-desc">Ejercicios acrobáticos ejecutados por un atleta solo sobre el caballo en movimiento. Requiere equilibrio, flexibilidad y confianza con el animal.</p>
+        <div class="card-price">Consultar turno</div>
+      </div>
+      <div class="card fade-up">
+        <span class="card-icon">👯</span>
+        <div class="card-title">Volteo en Dupla (Pas de Deux)</div>
+        <p class="card-desc">Dos atletas realizan ejercicios sincronizados sobre el caballo, combinando fuerza, coordinación y expresión artística.</p>
+        <div class="card-price">Consultar turno</div>
+      </div>
+      <div class="card fade-up">
+        <span class="card-icon">🎪</span>
+        <div class="card-title">Volteo en Equipo</div>
+        <p class="card-desc">Equipos de hasta 8 atletas realizan coreografías simultáneas y por turnos sobre el caballo. La modalidad más espectacular del deporte.</p>
+        <div class="card-price">Consultar turno</div>
+      </div>
+      <div class="card fade-up">
+        <span class="card-icon">🌱</span>
+        <div class="card-title">Iniciación infantil</div>
+        <p class="card-desc">Clases para niños desde 4 años. Acercamiento al caballo, bases de acrobacia y desarrollo motor en un ambiente seguro y divertido.</p>
+        <div class="card-price">Desde $[precio] / mes</div>
+      </div>
+      <div class="card fade-up">
+        <span class="card-icon">🏋️</span>
+        <div class="card-title">Preparación física</div>
+        <p class="card-desc">Entrenamiento específico en tierra: flexibilidad, fuerza funcional, saltos y coreografía. Complemento esencial para el alto rendimiento.</p>
+        <div class="card-price">Incluido en el programa</div>
+      </div>
+      <div class="card fade-up">
+        <span class="card-icon">🎯</span>
+        <div class="card-title">Competencia FEI</div>
+        <p class="card-desc">Preparación y representación en competencias nacionales e internacionales bajo el reglamento de la Federación Ecuestre Internacional.</p>
+        <div class="card-price">Atletas seleccionados</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Galería</div>
+      <h2 class="section-title">Momentos<br><em>en acción</em></h2>
+    </div>
+    <div class="galeria-filtros">
+      <button class="filtro-btn active" onclick="filtrar(this,'todo')">Todos</button>
+      <button class="filtro-btn" onclick="filtrar(this,'competencia')">Competencias</button>
+      <button class="filtro-btn" onclick="filtrar(this,'entrenamiento')">Entrenamientos</button>
+      <button class="filtro-btn" onclick="filtrar(this,'caballos')">Caballos</button>
+    </div>
+    <div class="galeria-grid" id="galeria-grid">
+      <div class="galeria-item wide" data-cat="competencia" onclick="abrirLightbox('Competencia Nacional 2024')">
+        <span class="ph-icon">🏆</span>
+        <span class="ph-label">Foto destacada — Competencia Nacional 2024</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+      <div class="galeria-item" data-cat="entrenamiento" onclick="abrirLightbox('Entrenamiento matutino')">
+        <span class="ph-icon">🤸</span>
+        <span class="ph-label">Entrenamiento matutino</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+      <div class="galeria-item" data-cat="caballos" onclick="abrirLightbox('Nuestros caballos')">
+        <span class="ph-icon">🐴</span>
+        <span class="ph-label">Nuestros caballos</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+      <div class="galeria-item" data-cat="competencia" onclick="abrirLightbox('Equipo en competencia')">
+        <span class="ph-icon">🎪</span>
+        <span class="ph-label">Equipo en competencia</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+      <div class="galeria-item wide" data-cat="entrenamiento" onclick="abrirLightbox('Sesión de acrobacia')">
+        <span class="ph-icon">🌟</span>
+        <span class="ph-label">Sesión de acrobacia — ejercicios en tierra</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+      <div class="galeria-item" data-cat="caballos" onclick="abrirLightbox('Cuidado del caballo')">
+        <span class="ph-icon">❤️</span>
+        <span class="ph-label">Cuidado del caballo</span>
+        <div class="galeria-overlay"><span>Ver foto</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="cerrarLightbox()">
+  <button class="lightbox-close" onclick="cerrarLightbox()">✕</button>
+  <div class="lightbox-content">
+    <span>📷 Aquí irá tu foto real</span>
+  </div>
+  <div class="lightbox-title" id="lb-title"></div>
+</div>
+
+<!-- ATLETAS -->
+<section id="atletas">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Selección</div>
+      <h2 class="section-title">Nuestros<br><em>atletas</em></h2>
+    </div>
+    <div class="atletas-grid">
+      <div class="atleta-card fade-up">
+        <div class="atleta-foto">
+          <span class="ph-icon">👤</span>
+          <span style="font-size:11px;">Foto del atleta</span>
+        </div>
+        <div class="atleta-info">
+          <div class="atleta-nombre">[Nombre Apellido]</div>
+          <div class="atleta-rol">Individual — Alto rendimiento</div>
+          <div class="atleta-logros">🥇 Campeón Nacional 2023<br>🌍 Participación Panamericano 2022</div>
+        </div>
+      </div>
+      <div class="atleta-card fade-up">
+        <div class="atleta-foto">
+          <span class="ph-icon">👤</span>
+          <span style="font-size:11px;">Foto del atleta</span>
+        </div>
+        <div class="atleta-info">
+          <div class="atleta-nombre">[Nombre Apellido]</div>
+          <div class="atleta-rol">Equipo — Capitana</div>
+          <div class="atleta-logros">🥈 Subcampeona Nacional 2023<br>📍 [Ciudad de origen]</div>
+        </div>
+      </div>
+      <div class="atleta-card fade-up">
+        <div class="atleta-foto">
+          <span class="ph-icon">👤</span>
+          <span style="font-size:11px;">Foto del atleta</span>
+        </div>
+        <div class="atleta-info">
+          <div class="atleta-nombre">[Nombre Apellido]</div>
+          <div class="atleta-rol">Pas de Deux</div>
+          <div class="atleta-logros">🥉 Tercer puesto Nacional<br>📍 [Ciudad de origen]</div>
+        </div>
+      </div>
+      <div class="atleta-card fade-up">
+        <div class="atleta-foto">
+          <span class="ph-icon">👤</span>
+          <span style="font-size:11px;">Foto del atleta</span>
+        </div>
+        <div class="atleta-info">
+          <div class="atleta-nombre">[Nombre Apellido]</div>
+          <div class="atleta-rol">Entrenador / Longeur</div>
+          <div class="atleta-logros">🎓 Certificado FEI<br>📍 [Ciudad de origen]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Testimonios</div>
+      <h2 class="section-title">Lo que dicen<br><em>nuestros atletas</em></h2>
+    </div>
+    <div class="testimonios-grid">
+      <div class="testimonio fade-up">
+        <p class="testimonio-texto">Representar a la Argentina me llenó de orgullo. El volteo ecuestre me enseñó disciplina, confianza y la conexión más increíble con un animal.</p>
+        <div class="testimonio-autor">
+          <div class="testimonio-avatar">👤</div>
+          <div>
+            <div class="testimonio-nombre">[Nombre del atleta]</div>
+            <div class="testimonio-origen">Competidora individual · [Ciudad]</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio fade-up">
+        <p class="testimonio-texto">Ver a mi hija representar al país haciendo acrobacias sobre un caballo fue un momento que no voy a olvidar jamás. Este equipo nos dio una segunda familia.</p>
+        <div class="testimonio-autor">
+          <div class="testimonio-avatar">👤</div>
+          <div>
+            <div class="testimonio-nombre">[Nombre del padre/madre]</div>
+            <div class="testimonio-origen">Familia del equipo · [Ciudad]</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonio fade-up">
+        <p class="testimonio-texto">El trabajo en equipo que aprendí acá lo aplico en todos los aspectos de mi vida. Los entrenadores son excelentes y los caballos son espectaculares.</p>
+        <div class="testimonio-autor">
+          <div class="testimonio-avatar">👤</div>
+          <div>
+            <div class="testimonio-nombre">[Nombre del atleta]</div>
+            <div class="testimonio-origen">Equipo de 8 · [Ciudad]</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Contacto</div>
+      <h2 class="section-title">Sumarte<br><em>al equipo</em></h2>
+    </div>
+    <div class="contacto-grid">
+      <div class="contacto-info fade-up">
+        <div class="contacto-dato">
+          <div class="contacto-dato-icon">📍</div>
+          <div>
+            <div class="contacto-dato-label">Dirección</div>
+            <div class="contacto-dato-val">[Calle y número]<br>[Ciudad, Provincia, Argentina]</div>
+          </div>
+        </div>
+        <div class="contacto-dato">
+          <div class="contacto-dato-icon">📞</div>
+          <div>
+            <div class="contacto-dato-label">Teléfono / WhatsApp</div>
+            <div class="contacto-dato-val">
+              <a href="https://wa.me/54911XXXXXXXX" style="color:var(--blue);">+54 9 11 XXXX-XXXX</a>
+            </div>
+          </div>
+        </div>
+        <div class="contacto-dato">
+          <div class="contacto-dato-icon">📧</div>
+          <div>
+            <div class="contacto-dato-label">Email</div>
+            <div class="contacto-dato-val">
+              <a href="mailto:info@[tuequipo].com" style="color:var(--blue);">info@[tuequipo].com</a>
+            </div>
+          </div>
+        </div>
+        <div class="contacto-dato">
+          <div class="contacto-dato-icon">🕐</div>
+          <div>
+            <div class="contacto-dato-label">Horarios de entrenamiento</div>
+            <div class="contacto-dato-val">
+              Lunes a viernes: [hora] a [hora]<br>
+              Sábados: [hora] a [hora]<br>
+              Domingos: según competencia
+            </div>
+          </div>
+        </div>
+        <div class="mapa-placeholder">
+          <span style="font-size:28px;opacity:0.2;">🗺️</span>
+          <span>Mapa de ubicación</span>
+          <span style="font-size:11px;opacity:0.5;">Reemplazá por iframe de Google Maps</span>
+        </div>
+      </div>
+      <div class="fade-up">
+        <form id="contact-form" onsubmit="enviarFormulario(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="nombre">Nombre</label>
+              <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="apellido">Apellido</label>
+              <input class="form-input" type="text" id="apellido" name="apellido" placeholder="Tu apellido" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="telefono">Teléfono / WhatsApp</label>
+            <input class="form-input" type="tel" id="telefono" name="telefono" placeholder="+54 9 11 ...">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="interes">Me interesa</label>
+            <select class="form-input" id="interes" name="interes">
+              <option value="">Seleccioná una opción</option>
+              <option>Iniciación infantil</option>
+              <option>Volteo individual</option>
+              <option>Volteo en equipo</option>
+              <option>Pas de Deux</option>
+              <option>Otra consulta</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="mensaje">Mensaje</label>
+            <textarea class="form-input" id="mensaje" name="mensaje" placeholder="Contanos sobre vos, tu experiencia y lo que buscás..."></textarea>
+          </div>
+          <button type="submit" class="btn-primary" style="width:100%;padding:15px;">
+            Enviar consulta
+          </button>
+          <p style="font-size:11px;color:var(--muted);margin-top:12px;text-align:center;">
+            También podés escribirnos directamente por WhatsApp 💬
+          </p>
+        </form>
+        <div id="form-success" style="display:none;text-align:center;padding:40px 0;">
+          <div style="font-size:48px;margin-bottom:16px;">✅</div>
+          <h3 style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--blue);margin-bottom:10px;">¡Mensaje enviado!</h3>
+          <p style="color:var(--muted);font-size:14px;">Te respondemos en menos de 24 horas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">VOLTEO<span> ecuestre</span></div>
+        <p class="footer-desc">
+          Selección Argentina de volteo ecuestre. Representamos a la Nación
+          en competencias nacionales e internacionales bajo la FEI.
+        </p>
+        <div class="redes">
+          <a href="#" class="red-btn" title="Instagram" aria-label="Instagram">📸</a>
+          <a href="#" class="red-btn" title="Facebook" aria-label="Facebook">📘</a>
+          <a href="https://wa.me/54911XXXXXXXX" class="red-btn" title="WhatsApp" aria-label="WhatsApp">💬</a>
+          <a href="#" class="red-btn" title="YouTube" aria-label="YouTube">▶️</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title">Navegación</div>
+        <ul class="footer-links">
+          <li><a href="#sobre">Nosotros</a></li>
+          <li><a href="#servicios">Disciplinas</a></li>
+          <li><a href="#galeria">Galería</a></li>
+          <li><a href="#atletas">Atletas</a></li>
+          <li><a href="#contacto">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Institucional</div>
+        <ul class="footer-links">
+          <li><a href="#">Reglamento FEI</a></li>
+          <li><a href="#">Federación Ecuestre Argentina</a></li>
+          <li><a href="#">Calendario de competencias</a></li>
+          <li><a href="#">Política de privacidad</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 [Nombre del equipo] · Selección Argentina de Volteo Ecuestre</span>
+      <span>Hecho con ❤️ para el deporte ecuestre argentino</span>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante — reemplazá el número -->
+<a href="https://wa.me/54911XXXXXXXX" class="wa-btn" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+
+<script>
+  // Menú hamburguesa
+  const hamBtn = document.getElementById('ham-btn');
+  const navMobile = document.getElementById('nav-mobile');
+  hamBtn.addEventListener('click', () => navMobile.classList.toggle('open'));
+  function closeMobile() { navMobile.classList.remove('open'); }
+
+  // Sombra en scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 40);
+  });
+
+  // Animaciones fade-up
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Filtros galería
+  function filtrar(btn, cat) {
+    document.querySelectorAll('.filtro-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.galeria-item').forEach(item => {
+      item.style.display = (cat === 'todo' || item.dataset.cat === cat) ? 'flex' : 'none';
+    });
+  }
+
+  // Lightbox
+  function abrirLightbox(titulo) {
+    document.getElementById('lb-title').textContent = titulo;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrarLightbox(); });
+
+  // Formulario (demo)
+  // Para conectar con email real → Formspree: https://formspree.io
+  function enviarFormulario(e) {
+    e.preventDefault();
+    document.getElementById('contact-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+</body>
+</html>
